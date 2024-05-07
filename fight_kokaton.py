@@ -153,6 +153,28 @@ class Explosion:
             self.img = self.imgs[self.life % 2]
             screen.blit(self.img,self.rct)
 
+class Score:
+    def __init__(self):
+        #self.fonto = pg.font.SysFont("hgp創英角ポップ体", 30)
+        #self.score = 0
+        #self.update_img()
+
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.score = 0
+        self.update_img()
+        self.rct = self.img.get_rect()
+        self.rct.center = (100, HEIGHT - 50)
+
+    def update_img(self):
+        self.img = self.fonto.render("score : " + str(self.score), 0, (0, 0, 255))
+
+    def update(self, screen:pg.Surface):
+        self.update_img()
+        screen.blit(self.img, self.rct)
+
+    def increase_score(self):
+        self.score += 1
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -162,6 +184,7 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     beam = None
     clock = pg.time.Clock()
+    score = Score()
     tmr = 0
     exps = []
     while True:
@@ -182,7 +205,7 @@ def main():
                 txt = fonto.render("Game Over", True, (255, 0, 0))
                 screen.blit(txt, [WIDTH/2-150, HEIGHT/2])
                 pg.display.update()
-                time.sleep(5)
+                time.sleep(1)
                 return
         #if not (beam is None or bomb is None):
         for i, bomb in enumerate(bombs):
@@ -191,20 +214,19 @@ def main():
                     exp = Explosion(bomb,100)
                     exps.append(exp)
                     exps = [exp for exp in exps if exp.life > 0]
-
                     beam = None
                     bombs[i] = None
+                    score.increase_score()
                     bird.change_img(6, screen)
                     pg.display.update()
         bombs = [bomb for bomb in bombs if bomb is not None]
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
+        score.update(screen)
         for bomb in bombs:
             bomb.update(screen)
         for exp in exps:
             exp.update(screen)
-        # if  is not None:
-        #     beam.update(screen)
         if beam is not None:
             beam.update(screen)
         pg.display.update()
