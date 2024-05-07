@@ -155,10 +155,6 @@ class Explosion:
 
 class Score:
     def __init__(self):
-        #self.fonto = pg.font.SysFont("hgp創英角ポップ体", 30)
-        #self.score = 0
-        #self.update_img()
-
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.score = 0
         self.update_img()
@@ -180,7 +176,6 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((900, 400))
-    #bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     beam = None
     clock = pg.time.Clock()
@@ -207,7 +202,6 @@ def main():
                 pg.display.update()
                 time.sleep(1)
                 return
-        #if not (beam is None or bomb is None):
         for i, bomb in enumerate(bombs):
             if beam is not None:
                 if beam.rct.colliderect(bomb.rct):  # ビームと爆弾が衝突したら
